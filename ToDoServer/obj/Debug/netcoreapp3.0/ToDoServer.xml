@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ToDoServer</name>
+    </assembly>
+    <members>
+        <member name="M:ToDoServer.Controllers.ToDoListController.Get(System.String)">
+            <summary>
+            Get a (list of) <see cref="T:ToDoServer.Models.ToDoTask"/> for the specified user
+            </summary>
+            <param name="owner">The user to filter by</param>
+            <param name="id">An id to retrieve only one <see cref="T:ToDoServer.Models.ToDoTask"/></param>
+            <returns>A (potentially empty) collection of <see cref="T:ToDoServer.Models.ToDoTask"/></returns>
+        </member>
+        <member name="M:ToDoServer.Controllers.ToDoListController.GetTask(System.String,System.Int32)">
+            <summary>
+            Get a (list of) <see cref="T:ToDoServer.Models.ToDoTask"/> for the specified user
+            </summary>
+            <param name="owner">The user to filter by</param>
+            <param name="id">An id to retrieve only one <see cref="T:ToDoServer.Models.ToDoTask"/></param>
+            <returns>A (potentially empty) collection of <see cref="T:ToDoServer.Models.ToDoTask"/></returns>
+        </member>
+        <member name="M:ToDoServer.Controllers.ToDoListController.Post(ToDoServer.Models.ToDoTask)">
+            <summary>
+            Add a <see cref="T:ToDoServer.Models.ToDoTask"/>
+            </summary>
+            <param name="todo">The <see cref="T:ToDoServer.Models.ToDoTask"/> to add</param>
+        </member>
+        <member name="M:ToDoServer.Controllers.ToDoListController.Put(ToDoServer.Models.ToDoTask)">
+            <summary>
+            Modify a <see cref="T:ToDoServer.Models.ToDoTask"/>
+            </summary>
+            <param name="todo">The <see cref="T:ToDoServer.Models.ToDoTask"/> with a modified description</param>
+        </member>
+        <member name="M:ToDoServer.Controllers.ToDoListController.Delete(System.String,System.Int32)">
+            <summary>
+            Delete a <see cref="T:ToDoServer.Models.ToDoTask"/>
+            </summary>
+            <param name="owner">The user that owns the <see cref="T:ToDoServer.Models.ToDoTask"/> to delete</param>
+            <param name="id">The id of the <see cref="T:ToDoServer.Models.ToDoTask"/> to delete</param>
+        </member>
+        <member name="T:ToDoServer.Models.ToDoTask">
+            <summary>
+            A task you need to do
+            </summary>
+        </member>
+        <member name="P:ToDoServer.Models.ToDoTask.Id">
+            <summary>
+            The ID of the task (used in uniquely identifying and sorting)
+            </summary>
+        </member>
+        <member name="P:ToDoServer.Models.ToDoTask.Description">
+            <summary>
+            The description of the task
+            </summary>
+        </member>
+        <member name="P:ToDoServer.Models.ToDoTask.Owner">
+            <summary>
+            The person who has to do the task
+            </summary>
+        </member>
+    </members>
+</doc>
