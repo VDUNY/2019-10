@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+// package ToDo.v1;
+
+option csharp_namespace = "Huddled.ToDos.Services";
+
+// import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service ToDoList {
+	rpc CreateToDo(CreateToDoRequest) returns (ToDo) {}
+
+	rpc GetToDo(ToDoId) returns (ToDo) {}
+
+	rpc ListToDo(ListToDoRequest) returns (stream ToDo) {}
+	
+	rpc CompleteToDo(UpdateToDoRequest) returns (ToDoId) {}
+
+	rpc DeleteToDo(UpdateToDoRequest) returns (ToDoId) {}
+
+	rpc UpdateToDo(ToDo) returns (ToDo) {}
+}
+
+
+// Task we have to do
+message ToDo {
+    // Unique integer identifier of the ToDo task
+    int64 id = 1;
+
+    // Title of the task
+    string title = 2;
+
+    // Detail description of the ToDo task
+    string description = 3;
+
+	// Whether this is still to do, or done
+	bool completed = 4;
+
+    // Date and time to remind us about the ToDo task
+    google.protobuf.Timestamp reminder = 5;
+	
+    // Date and time the task was created
+    google.protobuf.Timestamp created_at = 6;
+
+    // Date and time the task was completed
+    google.protobuf.Timestamp completed_at = 7;
+
+}
+
+message CreateToDoRequest {
+	string title = 1;
+	string description = 2;
+	google.protobuf.Timestamp reminder = 3;
+}
+
+message ToDoId {
+	int64 id = 1;
+}
+
+message ListToDoRequest {
+	int32 limit = 1;
+	bool not_completed = 2;
+}
+
+message UpdateToDoRequest {
+	int64 id = 1;
+	google.protobuf.Timestamp timestamp = 15;
+}

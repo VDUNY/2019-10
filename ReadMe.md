@@ -34,10 +34,11 @@ Install-Package NSwag.AspNetCore
 
 - Write a ToDoTask and a ToDoController, with XML Documentation
 
-ASP.NET Core and Blazor updates in .NET Core 3.0
+## The Container
 
-Today we are thrilled to announce the release of .NET Core 3.0! .NET Core 3.0 is ready for production use, and is loaded with lots of great new features for building amazing web apps with ASP.NET Core and Blazor.
+In order to make the project cross-platform and cross-cloud, to make building and deploying (and debugging) not depend on or be disrupted by vagaries in your development environment, we have decided to package our apps as containers. We manage those containers with Docker, and configure them during development in Visual Studio with a Dockerfile and Docker-Compose.yaml files.
 
+For simplicity (and because this isn't a presentation about docker) I'm using the Dockerfile that Visual Studio creates.
 
 
 
@@ -53,6 +54,9 @@ This project incorporates OpenAPI (and generated client code), the new JSON seri
 Some of the big new features in this release of ASP.NET Core include:
 
     - Create high-performance backend services with gRPC.
+        - [Can't host on Azure App Services, fix requires IIS and Windows kernel changes](https://github.com/aspnet/AspNetCore/issues/9020#issuecomment-486990716)
+        - I was originally going to use this for our talk today, but it restricted my options, so we'll have to save this for another talk...
+        - Useful gRPC GUI Explorer Client https://github.com/uw-labs/bloomrpc/releases
     - SignalR now has support for automatic reconnection and client-to-server streaming.
     - Generate strongly typed client code for Web APIs with OpenAPI documents.
     - Endpoint routing integrated through the framework.
@@ -69,3 +73,6 @@ Some of the big new features in this release of ASP.NET Core include:
         - Blazor WebAssembly is still in preview. You can install it with:
         `dotnet new -i Microsoft.AspNetCore.Blazor.Templates::3.0.0-preview9.19465.2`
     - Performance improvements across the entire stack.
+
+##
+
