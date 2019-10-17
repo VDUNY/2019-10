@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 
 [assembly: ApiController]
-namespace ToDoServer
+namespace Huddled.ToDos
 {
     public class Startup
     {

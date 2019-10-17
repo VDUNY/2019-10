@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ToDoServer.Models;
+using Huddled.ToDos.Models;
 
-namespace ToDoServer.Controllers
+namespace Huddled.ToDos.Controllers
 {
     // [ApiVersion("1.0")]
     [Route("[controller]")]

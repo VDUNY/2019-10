@@ -1,4 +1,4 @@
-﻿namespace ToDoServer.Models
+﻿namespace Huddled.ToDos.Models
 {
     /// <summary>
     /// A task you need to do

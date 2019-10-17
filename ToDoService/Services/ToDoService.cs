@@ -7,7 +7,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Huddled.ToDos.Services
+namespace Huddled.ToDo.Services
 {
     public class ToDoService : ToDoList.ToDoListBase
     {
