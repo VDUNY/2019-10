@@ -34,6 +34,11 @@ Install-Package NSwag.AspNetCore
 
 - Write a ToDoTask and a ToDoController, with XML Documentation
 
+### A Blazor Client project
+
+Generate some client code with [NSwag](https://github.com/RicoSuter/NSwag). I tried the generator in [swagger-codegen](https://github.com/swagger-api/swagger-codegen#compatibility) but their `csharp-dotnet2` generated synchronous REST calls, which is just unforgivable.
+
+
 ## The Container
 
 In order to make the project cross-platform and cross-cloud, to make building and deploying (and debugging) not depend on or be disrupted by vagaries in your development environment, we have decided to package our apps as containers. We manage those containers with Docker, and configure them during development in Visual Studio with a Dockerfile and Docker-Compose.yaml files.

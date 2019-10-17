@@ -1,0 +1,91 @@
+﻿@page "/dialog/{TaskId}"
+@inject HttpClient http
+@inject DialogService dialog
+
+<h1 style="display:inline">@task.Title</h1>
+
+<RadzenTemplateForm Data="@task" Visible="@(task != null)" TItem="ToDoTask" Submit="@((ToDoTask task) => { Submit(task); })">
+    <ChildContent>
+        <div style="margin-bottom: 1rem;" class="row">
+            <div class="col-md-3">
+                <RadzenLabel Text="Title" Component="Title" style="width: 100%;">
+                </RadzenLabel>
+            </div>
+            <div class="col-md-9">
+                <RadzenTextBox MaxLength="210" style="display: block; width: 100%;" Name="Title">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Title" Text="Title is required" style="position: absolute;">
+                </RadzenRequiredValidator>
+            </div>
+        </div>
+        <div style="margin-bottom: 1rem;" class="row">
+            <div class="col-md-3">
+                <RadzenLabel Text="Details" Component="Details" style="width: 100%;">
+                </RadzenLabel>
+            </div>
+            <div class="col-md-9">
+                <RadzenTextBox MaxLength="1024" style="display: block; width: 100%;" Name="Details">
+                </RadzenTextBox>
+            </div>
+        </div>
+        <div style="margin-bottom: 1rem;" class="row">
+            <div class="col-md-3">
+                <RadzenLabel Text="Due Date" Component="CompletedAt" style="width: 100%;">
+                </RadzenLabel>
+            </div>
+            <div class="col-md-9">
+                <RadzenDatePicker ShowTime="true" DateFormat="MM/dd/yyyy h:mm tt" style="display: block; width: 100%;" Name="CompletedAt" TValue="DateTimeOffset">
+                </RadzenDatePicker>
+            </div>
+        </div>
+        <div style="margin-bottom: 1rem;" class="row">
+            <div class="col-md-3">
+                <RadzenLabel Text="Reminder" Component="Reminder" style="width: 100%;">
+                </RadzenLabel>
+            </div>
+            <div class="col-md-9">
+                <RadzenDatePicker ShowTime="true" DateFormat="MM/dd/yyyy h:mm tt" style="display: block; width: 100%;" Name="Reminder" TValue="DateTimeOffset">
+                </RadzenDatePicker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col offset-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" ButtonStyle="ButtonStyle.Primary" />
+                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" />
+            </div>
+        </div>
+    </ChildContent>
+</RadzenTemplateForm>
+
+@code {
+    [Parameter]
+    public int TaskId { get; set; }
+
+    ToDoTask task;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var todo = new ToDoClient(http);
+        try
+        {
+            task = await todo.GetAsync(TaskId);
+        }
+        catch (Exception ex)
+        {
+            dialog.Open<Huddled.ToDo.Pages.Counter>(ex.Message,
+                new Dictionary<string, object>() { { "Message", ex.Message } },
+                new DialogOptions() { Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" });
+        }
+    }
+
+    void Submit(ToDoTask task)
+    {
+        var todo = new ToDoClient(http);
+        todo.UpdateAsync(task).Wait();
+    }
+
+    void Cancel()
+    {
+        dialog.Close(false);
+    }
+}

@@ -1,0 +1,26 @@
+﻿@page "/dialog"
+@inject DialogService dialog
+
+<h1 style="display:inline">@Title</h1>
+
+<RadzenCard Style="margin-bottom: 20px;">
+    <div class="row">
+        @Message
+    </div>
+    <div class="row">
+        @Detail
+    </div>
+</RadzenCard>
+<div class="row">
+    <div class="col-md-12">
+        <RadzenButton Click="@((args) => dialog.Close(true))" Text="OK" Style="margin-bottom: 10px; width: 150px" />
+        <RadzenButton Click="@((args) => dialog.Close(false))" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="margin-bottom: 10px; width: 150px" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Message { get; set; }
+    [Parameter] public string Detail { get; set; }
+
+}

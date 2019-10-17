@@ -1,0 +1,79 @@
+﻿@page "/"
+@inject HttpClient http
+@inject DialogService dialog
+
+<h1>What do you need to do today?</h1>
+
+
+@if (todoList == null)
+{
+    <p><em>Loading list from server for first use...</em>@display</p>
+}
+else
+{
+    <RadzenGrid AllowFiltering="true" AllowPaging="true" PageSize="25" AllowSorting="true"
+                Data="@todoList" TItem="ToDoTask"
+                RowDoubleClick="@(args => dialog.Open<Huddled.ToDo.Pages.ToDoDialog>($"{args.Title}",
+                          new Dictionary<string, object>() { { "Task", args } },
+                          new DialogOptions(){ Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" }))">
+        <Columns>
+            <RadzenGridColumn Width="200px" TItem="ToDoTask" Property="Title" Title="Title">
+                <FooterTemplate>
+                    Next reminder: <b>@todoList.Where(t => !t.Completed && t.ReminderAt > DateTimeOffset.MinValue).OrderByDescending(t => t.ReminderAt).FirstOrDefault()?.ReminderAt</b>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ToDoTask" Property="Details" Title="Details">
+                <FooterTemplate>
+                    Next due date: <b>@todoList.Where(t => !t.Completed && t.CompletedAt > DateTimeOffset.MinValue).OrderByDescending(t => t.CompletedAt).FirstOrDefault()?.CompletedAt</b>
+                </FooterTemplate>
+
+            </RadzenGridColumn>
+            <RadzenGridColumn Width="120px" TItem="ToDoTask" Property="Reminder" Title="Reminder" Format="date-time">
+                <Template Context="task">
+                    @String.Format("{0:d}", task.ReminderAt);
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn Width="80px" TItem="ToDoTask" Property="Completed" Title="Completed">
+                <Template Context="task">
+                    <RadzenCheckBox Value="@task.Completed" Disabled="true" />
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ToDoTask" Property="CompletedAt" Title="Due Date">
+                <FooterTemplate>
+                    <b>@todoList.Count()</b> Tasks
+                </FooterTemplate>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+
+    <RadzenButton Text=@($"Clicky Thing") Click="@(args => dialog.Open<Dialog>($"Some Text Here",
+                          new Dictionary<string, object>() {
+                              { "Title", "This is a test" },
+                              { "Message", "This is another message here" },
+                              { "Detail", "There's a lot here" }
+                          },
+                          new DialogOptions(){ Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" }))" />
+}
+
+@code {
+    ICollection<ToDoTask> todoList;
+    string display = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var todo = new ToDoClient(http);
+        try
+        {
+            todoList = await todo.ListAsync();
+            display = todoList.Count.ToString();
+        }
+        catch (Exception ex)
+        {
+            dialog.Open<Huddled.ToDo.Pages.Counter>(ex.Message,
+                new Dictionary<string, object>() { { "Message", ex.Message } },
+                new DialogOptions() { Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" });
+        }
+    }
+}
+
+
