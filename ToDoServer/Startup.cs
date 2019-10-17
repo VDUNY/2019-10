@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 
 [assembly: ApiController]
-namespace Huddled.ToDos
+namespace Huddled.ToDo
 {
     public class Startup
     {
@@ -36,7 +36,7 @@ namespace Huddled.ToDos
                 {
                     document.Info.Version = "v1";
                     document.Info.Title = "ToDo API";
-                    document.Info.Description = "A simple ASP.NET Core web API";
+                    document.Info.Description = "A simple TODO task tracker API";
                     document.Info.TermsOfService = "None";
                     document.Info.Contact = new NSwag.OpenApiContact
                     {
