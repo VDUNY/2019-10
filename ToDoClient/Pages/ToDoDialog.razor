@@ -4,7 +4,7 @@
 
 <h1 style="display:inline">@task.Title</h1>
 
-<RadzenTemplateForm Data="@task" Visible="@(task != null)" TItem="ToDoTask" Submit="@((ToDoTask task) => { Submit(task); })">
+<RadzenTemplateForm Data="@task" Visible="@(task != null)" TItem="Task" Submit="@((Task task) => { Submit(task); })">
     <ChildContent>
         <div style="margin-bottom: 1rem;" class="row">
             <div class="col-md-3">
@@ -61,7 +61,7 @@
     [Parameter]
     public int TaskId { get; set; }
 
-    ToDoTask task;
+    Task task;
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,7 +78,7 @@
         }
     }
 
-    void Submit(ToDoTask task)
+    void Submit(Task task)
     {
         var todo = new ToDoClient(http);
         todo.UpdateAsync(task).Wait();
