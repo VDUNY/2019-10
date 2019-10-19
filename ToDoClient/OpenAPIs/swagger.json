@@ -1,0 +1,254 @@
+{
+  "x-generator": "NSwag v13.1.3.0 (NJsonSchema v10.0.27.0 (Newtonsoft.Json v9.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "ToDo API",
+    "description": "A simple TODO task tracker API",
+    "termsOfService": "None",
+    "contact": {
+      "name": "Joel Bennett",
+      "url": "https://twitter.com/jaykul",
+      "email": "Jaykul@HuddledMasses.org"
+    },
+    "license": {
+      "name": "Use under the MIT License",
+      "url": "https://opensource.org/licenses/mit-license.html"
+    },
+    "version": "v1"
+  },
+  "host": "todoserver1.azurewebsites.net",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/ToDo": {
+      "get": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Get a list of Task",
+        "operationId": "ToDo_List",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "boolean",
+            "name": "showCompleted",
+            "in": "query",
+            "description": "If true, the results include all completed jobs too",
+            "default": false,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "A (potentially empty) collection of Task",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Task"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Add a Task",
+        "operationId": "ToDo_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "todo",
+            "in": "body",
+            "required": true,
+            "description": "The Task to add",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Update (replace) a Task",
+        "operationId": "ToDo_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "todo",
+            "in": "body",
+            "required": true,
+            "description": "The Task with a modified description",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/ToDo/{id}": {
+      "get": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Get a specific Task",
+        "operationId": "ToDo_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "An id to retrieve only one Task",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "A single Task",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Delete a Task",
+        "operationId": "ToDo_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the Task to delete",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Mark a specific Task done",
+        "operationId": "ToDo_Complete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Task": {
+      "type": "object",
+      "description": "A task you need to do",
+      "required": [
+        "id",
+        "completed",
+        "reminderAt",
+        "createdAt",
+        "completedAt"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The ID of the task (used in uniquely identifying and sorting)",
+          "format": "int32"
+        },
+        "title": {
+          "type": "string",
+          "description": "A one-line description of the task"
+        },
+        "details": {
+          "type": "string",
+          "description": "Details about the task. Not visible in lists"
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Indicates whether this task has been completed or not"
+        },
+        "reminderAt": {
+          "type": "string",
+          "description": "Date and time for a reminder",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Date and time the task was created",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "The due date, or when the task was completed",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

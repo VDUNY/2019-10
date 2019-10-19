@@ -4,14 +4,12 @@ For the [Rochester .NET User Group](https://www.meetup.com/Visual-Developers-of-
 
 In this presentation I'm going to be flying through the actual creation of the apps. Hopefully, we'll have time to come back and dig into this in a future presentation. For now, here are the basics:
 
-## The Application: Angular 8 and .NET Core 3 with OpenAPI
+## The Application: Blazor, ASP.NET, and OpenAPI
 
-We're creating an Angular 8 front end, and a .NET Core 3.0 back end web API based on OpenAPI.
+Using the new .NET Core 3, we will create a Blazor WASM front end, and a .NET Core 3.0 back end web API based on OpenAPI.
 
 You need:
 
-- [Node.js](https://nodejs.org/en/download/) 10 or later (I'm using the LTS version).
-- [Angular](https://angular.io/) 8 (use `npm i -g @angular/cli` once you have Node installed).
 - [.NET Core](https://dotnet.microsoft.com/download/dotnet-core/3.0) 3.0 which is included with the latest Visual Sdutio
 - [Visual Studio](https://visualstudio.microsoft.com/vs/) I'm using the [Preview](https://visualstudio.microsoft.com/vs/preview/) release.
 
@@ -46,6 +44,30 @@ In order to make the project cross-platform and cross-cloud, to make building an
 For simplicity (and because this isn't a presentation about docker) I'm using the Dockerfile that Visual Studio creates.
 
 
+## How many ways can we host it?
+
+Containers are quickly coming as an option to many of Azure's different compute offerings. As of today, there are at five different ways to host containers in Azure --not counting their container registry service for storing images (think Docker hub, or nuget):
+
+- Container Instances, the simples way to host a container
+- Batch, for high performance compute
+- App Service, for managed web apps and services
+- Service Fabric, Microsoft's microservices orchestrator
+- Azure Kubernetes Service, the open source container orchestrator
+
+Although there's a table on the main [containers on Azure](https://azure.microsoft.com/en-us/product-categories/containers/) page with a list of these hosting types, I highly recommend this flowchart [decision tree for Azure compute services](https://docs.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree) on docs.microsoft.com, because it makes the distinctions clearer.
+
+The one last thing I should add here, beyond what I may discuss live in person, is that Kubernetes is the only one of these services that is _basically_ the same when hosting on Azure as on AWS or GCP. That is: because Kubernetes is such a full-featured container orchestrator, you won't need to lean very much on Azure-specific services when you deploy there. The result is a whole layer of sophistication and complication that's quite different from the rest of Azure, but will be the same regardless of what company's cloud you choose to use.
+
+
+## The stuff I didn't get to in my presentation
+
+1. There are simple ways of hosting multiple containers in ACI (Azure Container Instances) that are very much like docker-compose, using a [multi-container YAML file](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-multi-container-yaml) you can easily load a group of containers all at once with the one-line command:
+
+    az container create --resource-group VDUNYToDoService --file todo-aci.yaml
+
+2. Of course, once you've done all the work of creating the Kubernetes cluster and assigning VMs and resources to it, pulling up a collection of web services all at once is easy there too:
+
+    kubectl apply -f .\todo-k8s.yaml
 
 
 # Bonus Content:
