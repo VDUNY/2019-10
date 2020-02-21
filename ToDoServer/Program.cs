@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Huddled.ToDo
+namespace Huddled.Tasks
 {
     public class Program
     {

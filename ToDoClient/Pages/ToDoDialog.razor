@@ -72,7 +72,7 @@
         }
         catch (Exception ex)
         {
-            dialog.Open<Huddled.ToDo.Pages.Counter>(ex.Message,
+            dialog.Open<Huddled.Tasks.Pages.Counter>(ex.Message,
                 new Dictionary<string, object>() { { "Message", ex.Message } },
                 new DialogOptions() { Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" });
         }

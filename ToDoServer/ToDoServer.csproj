@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>2a5d91d8-3906-4267-be69-9d00e9dd4ac3</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RootNamespace>Huddled.ToDo</RootNamespace>
+    <RootNamespace>Huddled.Tasks</RootNamespace>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 

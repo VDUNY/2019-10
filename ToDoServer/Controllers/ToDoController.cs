@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Huddled.ToDo.Controllers
+namespace Huddled.Tasks.Controllers
 {
     /// <summary>
     /// An implementation of a TODO task list API server

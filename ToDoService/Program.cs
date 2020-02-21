@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Huddled.ToDo
+namespace Huddled.Tasks
 {
     public class Program
     {

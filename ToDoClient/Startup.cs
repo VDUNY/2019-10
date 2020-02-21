@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Radzen;
 
-namespace Huddled.ToDo
+namespace Huddled.Tasks
 {
     public class ThemeState
     {

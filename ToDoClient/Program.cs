@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
 
-namespace Huddled.ToDo
+namespace Huddled.Tasks
 {
     public class Program
     {

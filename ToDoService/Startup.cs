@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Huddled.ToDo
+namespace Huddled.Tasks
 {
     public class Startup
     {
@@ -26,7 +26,7 @@ namespace Huddled.ToDo
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
