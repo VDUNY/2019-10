@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -13,79 +13,94 @@ namespace Huddled.Tasks.Controllers
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
-        private static Dictionary<int, Task> mockData = new Dictionary<int, Task>();
+        private static List<ToDo> mockData = new List<ToDo>();
+
+        // private static Dictionary<int, ToDo> mockData = new Dictionary<int, ToDo>();
 
         static ToDoController()
         {
-            mockData.Add(0, new Task { Id = 0, Title = "Plants", Details = "Water the plants, except for the succulents" });
-            mockData.Add(1, new Task { Id = 1, Title = "Cats", Details = "Feed the cats wet food in the kitchen, and dry food downstairs" });
+            mockData.Add(new ToDo { 
+                Id = 0, 
+                Title = "Plants", 
+                Description = "Water the plants, except for the succulents",
+                CreatedAt = DateTimeOffset.Now
+            });
+            mockData.Add(new ToDo { 
+                Id = 1, 
+                Title = "Cats", 
+                Description = "Feed the cats wet food in the kitchen, and dry food downstairs",
+                CreatedAt = DateTimeOffset.Now.AddHours(-2)
+            });
         }
 
         /// <summary>
-        /// Get a list of <see cref="Task"/>
+        /// Add a <see cref="ToDo"/>
         /// </summary>
-        /// <param name="showCompleted">If true, the results include all completed jobs too</param>
-        /// <returns>A (potentially empty) collection of <see cref="Task"/></returns>
-        [HttpGet()]
-        public IEnumerable<Task> List([FromQuery]bool showCompleted = false)
-        {
-            return mockData.Values.Where(t => !t.Completed || showCompleted);
-        }
-
-        /// <summary>
-        /// Get a specific <see cref="Task"/>
-        /// </summary>
-        /// <param name="id">An id to retrieve only one <see cref="Task"/></param>
-        /// <returns>A single <see cref="Task"/></returns>
-        [HttpGet("{id}", Name = "Get")]
-        public Task Get([FromRoute]int id)
-        {
-            return mockData[id];
-        }
-
-        /// <summary>
-        /// Add a <see cref="Task"/>
-        /// </summary>
-        /// <param name="todo">The <see cref="Task"/> to add</param>
+        /// <param name="todo">The <see cref="ToDo"/> to add</param>
         [HttpPost]
-        public ActionResult<Task> Create(Task todo)
+        public ActionResult<ToDo> Create(ToDo todo)
         {
-            todo.Id = mockData.Count > 0 ? mockData.Keys.Max() + 1 : 1;
-            mockData.Add(todo.Id, todo);
+            todo.Id = mockData.Count;
+            mockData.Add(todo);
 
             return CreatedAtRoute("Get", new { id = todo.Id }, todo);
         }
 
         /// <summary>
-        /// Update (replace) a <see cref="Task"/>
+        /// Get a list of <see cref="ToDo"/>
         /// </summary>
-        /// <param name="todo">The <see cref="Task"/> with a modified description</param>
+        /// <param name="offset">The starting offset (for paging)</param>
+        /// <param name="limit">The limit (count, for paging)</param>
+        /// <param name="showCompleted">If true, the results include all completed jobs too</param>
+        /// <returns>A (potentially empty) collection of <see cref="ToDo"/></returns>
+        [HttpGet()]
+        public IEnumerable<ToDo> List([FromQuery]int offset = 0, [FromQuery]int limit = int.MaxValue, [FromQuery]bool showCompleted = false)
+        {
+            return mockData.Where(t => !t.Completed || showCompleted).Skip(offset).Take(limit);
+        }
+
+        /// <summary>
+        /// Get a specific <see cref="ToDo"/>
+        /// </summary>
+        /// <param name="id">An id to retrieve only one <see cref="ToDo"/></param>
+        /// <returns>A single <see cref="ToDo"/></returns>
+        [HttpGet("{id}", Name = "Get")]
+        public ToDo Get([FromRoute]int id)
+        {
+            return mockData.FirstOrDefault(t => t.Id == id);
+        }
+
+        /// <summary>
+        /// Update (replace) a <see cref="ToDo"/>
+        /// </summary>
+        /// <param name="todo">The <see cref="ToDo"/> with a modified description</param>
         [HttpPut]
-        public void Update(Task todo)
+        public void Update(ToDo todo)
         {
             // yeah, it's very trusting ...
-            mockData[todo.Id] = todo;
+            var item = mockData.FirstOrDefault(t => t.Id == todo.Id);
+            item.MergeFrom(todo);
         }
 
         /// <summary>
-        /// Delete a <see cref="Task"/>
-        /// </summary>
-        /// <param name="id">The id of the <see cref="Task"/> to delete</param>
-        [HttpDelete("{id}")]
-        public void Delete([FromRoute]int id)
-        {
-            mockData.Remove(id);
-        }
-
-        /// <summary>
-        /// Mark a specific <see cref="Task"/> done
+        /// Mark a specific <see cref="ToDo"/> done
         /// </summary>
         /// <param name="id"></param>
         [HttpPatch("{id}")]
         public void Complete([FromRoute]int id)
         {
-            mockData[id].Completed = true;
+            mockData.FirstOrDefault(t => t.Id == id).Completed = true;
         }
-}
+
+        /// <summary>
+        /// Delete a <see cref="ToDo"/>
+        /// </summary>
+        /// <param name="id">The id of the <see cref="ToDo"/> to delete</param>
+        [HttpDelete("{id}")]
+        public void Delete([FromRoute]int id)
+        {
+            mockData.RemoveAll(t => t.Id == id);
+        }
+    }
 }
 

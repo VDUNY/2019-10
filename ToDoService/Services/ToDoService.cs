@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,14 +15,14 @@ namespace Huddled.Tasks.Services
 
         static ToDoService()
         {
-            mockData.Add(new ToDo { 
-                Id = 0, 
-                Title = "Cat", 
-                Description = "Feed the cat", 
+            mockData.Add(new ToDo {
+                Id = 0,
+                Title = "Cat",
+                Description = "Feed the cat",
                 CreatedAt = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
             });
-            mockData.Add(new ToDo { 
-                Id = 1, 
+            mockData.Add(new ToDo {
+                Id = 1,
                 Title = "Plants",
                 Description = "Water the plants",
                 CreatedAt = Timestamp.FromDateTimeOffset(DateTimeOffset.Now.AddHours(-2))
@@ -43,38 +43,19 @@ namespace Huddled.Tasks.Services
             return Task.FromResult(todo);
         }
 
-        public override Task<ToDoId> DeleteToDo(UpdateToDoRequest request, ServerCallContext context)
-        {
-            if (mockData.RemoveAll(t => t.Id == request.Id) < 1)
-            {
-                request.Id = -1;
-            }
-
-            return Task.FromResult(new ToDoId { Id = request.Id });
-        }
-
-        public override Task<ToDoId> CompleteToDo(UpdateToDoRequest request, ServerCallContext context)
-        {
-            var item = mockData.FirstOrDefault(t => t.Id == request.Id);
-            item.Completed = true;
-            item.CompletedAt = request.Timestamp;
-
-            return Task.FromResult(new ToDoId { Id = item.Id });
-        }
-
-        public override Task<ToDo> GetToDo(ToDoId request, ServerCallContext context)
-        {
-            return Task.FromResult(mockData.FirstOrDefault(t => t.Id == request.Id));
-        }
-
         public async override Task ListToDo(ListToDoRequest request, IServerStreamWriter<ToDo> responseStream, ServerCallContext context)
         {
-            foreach(ToDo t in mockData)
+            foreach(ToDo t in mockData.Where(t => !t.Completed || request.NotCompleted).Skip(request.Offset).Take(request.Limit))
             {
                 await responseStream.WriteAsync(t);
             }
 
             return;
+        }
+
+        public override Task<ToDo> GetToDo(ToDoId request, ServerCallContext context)
+        {
+            return Task.FromResult(mockData.FirstOrDefault(t => t.Id == request.Id));
         }
 
         public override Task<ToDo> UpdateToDo(ToDo request, ServerCallContext context)
@@ -83,6 +64,25 @@ namespace Huddled.Tasks.Services
             item.MergeFrom(request);
 
             return Task.FromResult(item);
+        }
+
+        public override Task<ToDoId> CompleteToDo(ToDoId request, ServerCallContext context)
+        {
+            var item = mockData.FirstOrDefault(t => t.Id == request.Id);
+            item.Completed = true;
+            item.CompletedAt = Timestamp.FromDateTimeOffset(DateTimeOffset.Now);
+
+            return Task.FromResult(new ToDoId { Id = item.Id });
+        }
+ 
+        public override Task<ToDoId> DeleteToDo(ToDoId request, ServerCallContext context)
+        {
+            if (mockData.RemoveAll(t => t.Id == request.Id) < 1)
+            {
+                request.Id = -1;
+            }
+
+            return Task.FromResult(new ToDoId { Id = request.Id });
         }
     }
 }
