@@ -12,33 +12,33 @@
 else
 {
     <RadzenGrid AllowFiltering="true" AllowPaging="true" PageSize="25" AllowSorting="true"
-                Data="@todoList" TItem="Task"
-                RowDoubleClick="@(args => dialog.Open<Huddled.Tasks.Pages.ToDoDialog>($"{args.Title}",
-                          new Dictionary<string, object>() { { "Task", args } },
+                Data="@todoList" TItem="ToDoItem"
+                RowDoubleClick="@(args => dialog.Open<Huddled.ToDo.Pages.ToDoDialog>($"{args.Title}",
+                          new Dictionary<string, object>() { { "ToDoItem", args } },
                           new DialogOptions(){ Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" }))">
         <Columns>
-            <RadzenGridColumn Width="200px" TItem="Task" Property="Title" Title="Title">
+            <RadzenGridColumn Width="200px" TItem="ToDoItem" Property="Title" Title="Title">
                 <FooterTemplate>
                     Next reminder: <b>@todoList.Where(t => !t.Completed && t.ReminderAt > DateTimeOffset.MinValue).OrderByDescending(t => t.ReminderAt).FirstOrDefault()?.ReminderAt</b>
                 </FooterTemplate>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="Task" Property="Details" Title="Details">
+            <RadzenGridColumn TItem="ToDoItem" Property="Details" Title="Details">
                 <FooterTemplate>
                     Next due date: <b>@todoList.Where(t => !t.Completed && t.CompletedAt > DateTimeOffset.MinValue).OrderByDescending(t => t.CompletedAt).FirstOrDefault()?.CompletedAt</b>
                 </FooterTemplate>
 
             </RadzenGridColumn>
-            <RadzenGridColumn Width="120px" TItem="Task" Property="Reminder" Title="Reminder" Format="date-time">
-                <Template Context="task">
-                    @String.Format("{0:d}", task.ReminderAt);
+            <RadzenGridColumn Width="120px" TItem="ToDoItem" Property="Reminder" Title="Reminder" Format="date-time">
+                <Template Context="toDoItem">
+                    @String.Format("{0:d}", toDoItem.ReminderAt);
                 </Template>
             </RadzenGridColumn>
-            <RadzenGridColumn Width="80px" TItem="Task" Property="Completed" Title="Completed">
-                <Template Context="task">
-                    <RadzenCheckBox Value="@task.Completed" Disabled="true" />
+            <RadzenGridColumn Width="80px" TItem="ToDoItem" Property="Completed" Title="Completed">
+                <Template Context="toDoItem">
+                    <RadzenCheckBox Value="@toDoItem.Completed" Disabled="true" />
                 </Template>
             </RadzenGridColumn>
-            <RadzenGridColumn TItem="Task" Property="CompletedAt" Title="Due Date">
+            <RadzenGridColumn TItem="ToDoItem" Property="CompletedAt" Title="Due Date">
                 <FooterTemplate>
                     <b>@todoList.Count()</b> Tasks
                 </FooterTemplate>
@@ -56,7 +56,7 @@ else
 }
 
 @code {
-    ICollection<Task> todoList;
+    ICollection<ToDoItem> todoList;
     string display = "";
 
     protected override async Task OnInitializedAsync()
@@ -64,12 +64,12 @@ else
         var todo = new ToDoClient(http);
         try
         {
-            todoList = await todo.ListAsync();
+            todoList = await todo.ListAsync(0, int.MaxValue, false);
             display = todoList.Count.ToString();
         }
         catch (Exception ex)
         {
-            dialog.Open<Huddled.Tasks.Pages.Counter>(ex.Message,
+            dialog.Open<Huddled.ToDo.Pages.Counter>(ex.Message,
                 new Dictionary<string, object>() { { "Message", ex.Message } },
                 new DialogOptions() { Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" });
         }

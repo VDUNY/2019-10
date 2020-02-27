@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Huddled.Tasks
+namespace Huddled.ToDo
 {
     /// <summary>
     /// A task you need to do
     /// </summary>
-    public class ToDo
+    public class ToDoItem
     {
         /// <summary>
         /// The ID of the task (used in uniquely identifying and sorting)
@@ -62,7 +62,7 @@ namespace Huddled.Tasks
         /// Update this ToDo from another
         /// </summary>
         /// <param name="other">A copy with updated information</param>
-        public void MergeFrom(ToDo other)
+        public void MergeFrom(ToDoItem other)
         {
             if (other == null)
             {

@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+option csharp_namespace = "Huddled.ToDo";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package todo.v1;
+
+service ToDo {
+    // Create
+    rpc CreateToDo(CreateToDoRequest) returns (ToDoItem) {
+        option (google.api.http) = {
+            post: "/v1/todo/"
+            body: "*"
+        };
+    }
+
+    // Read 
+    // Note that "stream" APIs won't be mapped to REST API
+    rpc AllToDo(ListToDoRequest) returns (stream ToDoItem) {}
+
+    // So i added an alternative non-streaming method
+    rpc ListToDo(ListToDoRequest) returns (ToDoList) {
+        option (google.api.http) = {
+            get: "/v1/todo"
+        };
+    }
+
+    rpc GetToDo(ToDoId) returns (ToDoItem) {
+        option (google.api.http) = {
+            get: "/v1/todo/{id}"
+        };
+    }
+
+    // Update
+    rpc UpdateToDo(ToDoItem) returns (ToDoItem) {
+        option (google.api.http) = {
+            put: "/v1/todo/{id}"
+            body: "*"
+        };
+    }
+    rpc CompleteToDo(ToDoId) returns (ToDoId) {
+        option (google.api.http) = {
+            patch: "/v1/todo/{id}"
+        };
+    }
+
+    // Delete
+    rpc DeleteToDo(ToDoId) returns (ToDoId) {
+        option (google.api.http) = {
+            delete: "/v1/todo/{id}"
+        };
+    }
+}
+
+
+// Task we have to do
+message ToDoItem {
+    // Unique integer identifier of the ToDoList task
+    int32 id = 1;
+
+    // Title of the task
+    string title = 2;
+
+    // Detail description of the ToDoList task
+    string description = 3;
+
+    // Whether this is still to do, or done
+    bool completed = 4;
+
+    // Date and time to remind us about the ToDoList task
+    google.protobuf.Timestamp reminder = 5;
+
+    // Date and time the task was created
+    google.protobuf.Timestamp created_at = 6;
+
+    // Date and time the task was completed
+    google.protobuf.Timestamp completed_at = 7;
+
+}
+
+message ToDoList {
+    repeated ToDoItem list = 1;
+}
+
+message CreateToDoRequest {
+    string title = 1;
+    string description = 2;
+    google.protobuf.Timestamp reminder = 3;
+}
+
+message ToDoId {
+    int32 id = 1;
+}
+
+message ListToDoRequest {
+    int32 offset = 1;
+    int32 limit = 2;
+    bool not_completed = 3;
+}

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Huddled.Tasks
+namespace Huddled.ToDo
 {
     public class Startup
     {
@@ -17,6 +17,8 @@ namespace Huddled.Tasks
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddGrpcHttpApi();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,10 +30,11 @@ namespace Huddled.Tasks
             }
 
             app.UseRouting();
-
+            // Add gRPC-Web middleware between UseRouting and UseEndpoints
+            app.UseGrpcWeb();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<Services.ToDoService>();
+                endpoints.MapGrpcService<Services.ToDoService>().EnableGrpcWeb();
 
                 endpoints.MapGet("/", async context =>
                 {

@@ -22,45 +22,11 @@
   ],
   "paths": {
     "/ToDo": {
-      "get": {
-        "tags": [
-          "ToDo"
-        ],
-        "summary": "Get a list of Task",
-        "operationId": "ToDo_List",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "type": "boolean",
-            "name": "showCompleted",
-            "in": "query",
-            "description": "If true, the results include all completed jobs too",
-            "default": false,
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "A (potentially empty) collection of Task",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Task"
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "ToDo"
         ],
-        "summary": "Add a Task",
+        "summary": "Add a ToDoItem",
         "operationId": "ToDo_Create",
         "consumes": [
           "application/json",
@@ -77,9 +43,9 @@
             "name": "todo",
             "in": "body",
             "required": true,
-            "description": "The Task to add",
+            "description": "The ToDoItem to add",
             "schema": {
-              "$ref": "#/definitions/Task"
+              "$ref": "#/definitions/ToDoItem"
             },
             "x-nullable": false
           }
@@ -89,7 +55,59 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/Task"
+              "$ref": "#/definitions/ToDoItem"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Get a list of ToDoItem",
+        "operationId": "ToDo_List",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "offset",
+            "in": "query",
+            "description": "The starting offset (for paging)",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "limit",
+            "in": "query",
+            "description": "The limit (count, for paging)",
+            "format": "int32",
+            "default": 2147483647,
+            "x-nullable": false
+          },
+          {
+            "type": "boolean",
+            "name": "showCompleted",
+            "in": "query",
+            "description": "If true, the results include all completed jobs too",
+            "default": false,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "A (potentially empty) collection of ToDoItem",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ToDoItem"
+              }
             }
           }
         }
@@ -98,7 +116,7 @@
         "tags": [
           "ToDo"
         ],
-        "summary": "Update (replace) a Task",
+        "summary": "Update (replace) a ToDoItem",
         "operationId": "ToDo_Update",
         "consumes": [
           "application/json",
@@ -110,9 +128,9 @@
             "name": "todo",
             "in": "body",
             "required": true,
-            "description": "The Task with a modified description",
+            "description": "The ToDoItem with a modified description",
             "schema": {
-              "$ref": "#/definitions/Task"
+              "$ref": "#/definitions/ToDoItem"
             },
             "x-nullable": false
           }
@@ -129,7 +147,7 @@
         "tags": [
           "ToDo"
         ],
-        "summary": "Get a specific Task",
+        "summary": "Get a specific ToDoItem",
         "operationId": "ToDo_Get",
         "produces": [
           "text/plain",
@@ -142,7 +160,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "An id to retrieve only one Task",
+            "description": "An id to retrieve only one ToDoItem",
             "format": "int32",
             "x-nullable": false
           }
@@ -150,33 +168,10 @@
         "responses": {
           "200": {
             "x-nullable": false,
-            "description": "A single Task",
+            "description": "A single ToDoItem",
             "schema": {
-              "$ref": "#/definitions/Task"
+              "$ref": "#/definitions/ToDoItem"
             }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "ToDo"
-        ],
-        "summary": "Delete a Task",
-        "operationId": "ToDo_Delete",
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "The id of the Task to delete",
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
           }
         }
       },
@@ -184,7 +179,7 @@
         "tags": [
           "ToDo"
         ],
-        "summary": "Mark a specific Task done",
+        "summary": "Mark a specific ToDoItem done",
         "operationId": "ToDo_Complete",
         "parameters": [
           {
@@ -201,11 +196,34 @@
             "description": ""
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "ToDo"
+        ],
+        "summary": "Delete a ToDoItem",
+        "operationId": "ToDo_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the ToDoItem to delete",
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
       }
     }
   },
   "definitions": {
-    "Task": {
+    "ToDoItem": {
       "type": "object",
       "description": "A task you need to do",
       "required": [
@@ -225,7 +243,7 @@
           "type": "string",
           "description": "A one-line description of the task"
         },
-        "details": {
+        "description": {
           "type": "string",
           "description": "Details about the task. Not visible in lists"
         },

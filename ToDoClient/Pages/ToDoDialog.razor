@@ -4,7 +4,7 @@
 
 <h1 style="display:inline">@task.Title</h1>
 
-<RadzenTemplateForm Data="@task" Visible="@(task != null)" TItem="Task" Submit="@((Task task) => { Submit(task); })">
+<RadzenTemplateForm Data="@task" Visible="@(task != null)" TItem="ToDoItem" Submit="@((ToDoItem task) => { Submit(task); })">
     <ChildContent>
         <div style="margin-bottom: 1rem;" class="row">
             <div class="col-md-3">
@@ -61,7 +61,7 @@
     [Parameter]
     public int TaskId { get; set; }
 
-    Task task;
+    ToDoItem task;
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,13 +72,13 @@
         }
         catch (Exception ex)
         {
-            dialog.Open<Huddled.Tasks.Pages.Counter>(ex.Message,
+            dialog.Open<Huddled.ToDo.Pages.Counter>(ex.Message,
                 new Dictionary<string, object>() { { "Message", ex.Message } },
                 new DialogOptions() { Width = "700px", Height = "530px", Left = "calc(50% - 350px)", Top = "calc(50% - 265px)" });
         }
     }
 
-    void Submit(Task task)
+    void Submit(ToDoItem task)
     {
         var todo = new ToDoClient(http);
         todo.UpdateAsync(task).Wait();
